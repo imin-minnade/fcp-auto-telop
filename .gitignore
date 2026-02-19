@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# 音声ファイル（サイズが大きいため除外）
+audio_input/*.mp3
+audio_input/*.mp4
+audio_input/*.m4a
+audio_input/*.mov
+audio_input/*.wav
+
+# VTT 出力（個人データのため除外）
+vtt_output/*.vtt
+
+# CSV データ（サンプル以外は除外）
+# csv_input/sample.csv は含める
+csv_input/*.csv
+!csv_input/sample.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
