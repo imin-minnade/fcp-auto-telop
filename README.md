@@ -2,7 +2,7 @@
 
 **Final Cut Pro のテロップ作業を自動化する Python ツールキット**
 
-動画1本あたりのテロップ作業を **約75%短縮** します。  
+動画1本あたりのテロップ作業を **約75%短縮** します。
 合成音声（VOICEVOX / AquesTalk）と生声収録の両方に対応。
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
@@ -21,7 +21,7 @@ Final Cut Pro のタイムライン上で直接テキストクリップを分割
 
 | ワークフロー | 説明 |
 |---|---|
-| **合成音声ルート** | シナリオ（CSV）→ 音声生成 → FCP でテロップ自動挿入 |
+| **合成音声ルート** | シナリオ（CSV）→ AquesTalk で音声生成 → FCP でテロップ自動挿入 |
 | **生声ルート** | 録音 → Whisper で文字起こし（VTT）→ FCP でテロップ自動挿入 |
 
 ### なぜ VREW や AI キャプションではなく、このツール？
@@ -38,13 +38,21 @@ Final Cut Pro のタイムライン上で直接テキストクリップを分割
 fcp-auto-telop/
 ├── scripts/                    # 自動化スクリプト
 │   ├── auto_fcp_telop_split_paste.py
+│   ├── auto_fcp_vtt_to_telop.py
 │   ├── auto_audio_to_vtt.py
 │   ├── auto_aques_talk_player.py
+│   ├── swap_title_number.py
+│   ├── vtt_timestamp_checker.py
 │   └── get_mouse_positions.py
 ├── csv_input/                  # シナリオ CSV を配置
 │   └── sample.csv
+├── txt_input/                  # セリフ TXT を配置
+│   └── sample.txt
 ├── audio_input/                # 音声ファイルを配置（生声ルート）
+├── vtt_input/                  # VTT ファイルを配置
+│   └── sample.vtt
 ├── vtt_output/                 # Whisper の文字起こし結果が出力される
+├── wav_output/                 # AquesTalk の音声ファイルを配置
 ├── requirements.txt
 └── README.md
 ```
@@ -54,28 +62,12 @@ fcp-auto-telop/
 | スクリプト | 機能 | 入力 | 出力 |
 |---|---|---|---|
 | `auto_fcp_telop_split_paste.py` | FCP 上でテキストクリップの分割とセリフの貼り付け | `txt_input/*.txt` | FCP タイムライン |
+| `auto_fcp_vtt_to_telop.py` | VTT の時刻でクリップを分割し、セリフを貼り付け | `vtt_input/*.vtt` | FCP タイムライン |
 | `auto_audio_to_vtt.py` | faster-whisper で音声ファイルを文字起こし | `audio_input/*` | `vtt_output/*.vtt` |
-| `auto_aques_talk_player.py` | AquesTalk Player への読み上げテキスト自動入力 | `csv_input/*.csv` | AquesTalk 音声 |
+| `auto_aques_talk_player.py` | AquesTalk Player への読み上げテキスト自動入力 | `csv_input/*.csv` | `wav_output/*.wav` |
+| `swap_title_number.py` | WAV ファイル名を「セリフ_番号」→「番号_セリフ」にリネーム | `wav_output/*.wav` | `wav_output/*.wav` |
+| `vtt_timestamp_checker.py` | VTT のタイムスタンプ重なりをチェック | `vtt_input/*.vtt` | 標準出力 |
 | `get_mouse_positions.py` | クリックした画面座標を表示 | マウス操作 | 座標値の表示 |
-
----
-
-## CSV フォーマット
-
-すべてのスクリプトで共通の CSV フォーマットを使用します。Numbers や Excel で編集できます。
-
-| 列名 | 説明 | 例 |
-|---|---|---|
-| `実行` | 1 = 実行、0 = スキップ | `1` |
-| `キャラクター` | キャラクター名（フィルタリング用） | `ナレーター` |
-| `セリフ` | テロップに表示するテキスト | `こんにちは` |
-
-```csv
-実行,キャラクター,セリフ
-1,ナレーター,皆さんこんにちは。
-1,ナレーター,今回は動画制作の効率化について紹介します。
-0,ナレーター,このセリフはスキップされます。
-```
 
 ---
 
@@ -101,10 +93,21 @@ python scripts/get_mouse_positions.py
 
 ### 3A. 合成音声ルート
 
-1. `csv_input/` にシナリオ CSV を配置
-2. VOICEVOX または AquesTalk で音声を生成
-3. FCP でテンプレートプロジェクトを開き、テキストクリップを選択
-4. スクリプトを実行：
+1. `csv_input/` にシナリオ CSV を配置（`sample.csv` を参照）
+2. AquesTalk Player で音声を自動生成：
+
+```bash
+python scripts/auto_aques_talk_player.py
+```
+
+3. `wav_output/` の WAV ファイルをリネーム（FCP で正しい順番に並ぶよう番号を先頭に）：
+
+```bash
+python scripts/swap_title_number.py
+```
+
+4. WAV ファイルを FCP に読み込み、テキストクリップを選択した状態にする
+5. テロップを自動挿入：
 
 ```bash
 python scripts/auto_fcp_telop_split_paste.py
@@ -119,8 +122,37 @@ python scripts/auto_fcp_telop_split_paste.py
 python scripts/auto_audio_to_vtt.py
 ```
 
-3. `vtt_output/` に生成された VTT を確認・修正
-4. FCP でテロップを自動挿入
+3. `vtt_output/` に生成された VTT を `vtt_input/` にコピーして確認・修正
+4. タイムスタンプの重なりをチェック：
+
+```bash
+python scripts/vtt_timestamp_checker.py
+```
+
+5. FCP でテロップを自動挿入：
+
+```bash
+python scripts/auto_fcp_vtt_to_telop.py
+```
+
+---
+
+## CSV フォーマット（合成音声ルート）
+
+`auto_aques_talk_player.py` で使用します。Numbers や Excel で編集できます。
+
+| 列名 | 説明 | 例 |
+|---|---|---|
+| `実行` | 1 = 実行、0 = スキップ | `1` |
+| `キャラクター` | キャラクター名（フィルタリング用） | `魔理沙` |
+| `セリフ` | 読み上げるテキスト | `こんにちは` |
+
+```csv
+実行,キャラクター,セリフ
+1,魔理沙,皆さんこんにちは。
+1,魔理沙,今回は動画制作の効率化について紹介します。
+0,魔理沙,このセリフはスキップされます。
+```
 
 ---
 
