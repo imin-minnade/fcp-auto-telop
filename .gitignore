@@ -8,11 +8,7 @@ build/
 venv/
 
 # 音声ファイル（サイズが大きいため除外）
-audio_input/*.mp3
-audio_input/*.mp4
-audio_input/*.m4a
-audio_input/*.mov
-audio_input/*.wav
+audio_input/*.*
 wav_output/*.wav
 
 # VTT 出力（個人データのため除外）

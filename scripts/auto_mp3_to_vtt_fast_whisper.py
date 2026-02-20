@@ -1,7 +1,7 @@
 """faster-whisper で音声/動画ファイルを文字起こしし、VTT に保存するスクリプト。
 
 使い方:
-1. audio_input/ に音声ファイル（mp3/mp4/m4a/wav）を配置
+1. audio_input/ に音声ファイル（mp3/mp4/m4a/mov/wav）を配置
 2. AUDIO_FILENAME を対象ファイル名に変更
 3. `pip install -r requirements.txt`（初回はモデル自動ダウンロード）
 4. `python scripts/auto_mp3_to_vtt_fast_whisper.py` を実行
@@ -23,7 +23,7 @@ AUDIO_DIR = Path("audio_input")
 VTT_DIR = Path("vtt_output")
 
 # 対象ファイル名（拡張子なしの場合は自動探索）
-AUDIO_FILENAME = "sample.mp3"
+AUDIO_FILENAME = "音声.mp3"
 
 # 探索対象の拡張子（優先順）
 ALLOWED_EXTS = [".mp3", ".mp4", ".m4a", ".mov", ".wav"]
@@ -36,9 +36,6 @@ DEVICE = "auto"
 
 # 計算精度: "auto" / "float16" / "int8_float16" など
 COMPUTE_TYPE = "auto"
-
-# 句読点として認識する文字
-SENTENCE_PUNCT = "。.!?！？"
 
 # 文を分ける無音ギャップのしきい値（秒）
 MAX_GAP_SECONDS = 0.2
@@ -104,7 +101,7 @@ def transcribe_to_vtt(audio_path: Path) -> str:
 
 
 def split_into_sentences(segments: Iterable) -> List[Tuple[float, float, str]]:
-    """Whisper のセグメントを句読点・無音ギャップで文単位に分割する。"""
+    """Whisper のセグメントを無音ギャップで文単位に分割する。"""
     sentences: List[Tuple[float, float, str]] = []
 
     for seg in segments:
@@ -130,7 +127,6 @@ def split_into_sentences(segments: Iterable) -> List[Tuple[float, float, str]]:
             buffer.append(word_text)
             last_end = end_w
 
-            punct_hit = word_text.strip() and word_text.strip()[-1] in SENTENCE_PUNCT
             over_time = (
                 MAX_SENTENCE_SECONDS is not None
                 and start_time is not None
@@ -138,7 +134,7 @@ def split_into_sentences(segments: Iterable) -> List[Tuple[float, float, str]]:
             )
             over_words = MAX_SENTENCE_WORDS is not None and len(buffer) >= MAX_SENTENCE_WORDS
 
-            if punct_hit or over_time or over_words:
+            if over_time or over_words:
                 sentences.append((start_time, last_end, "".join(buffer).strip()))
                 buffer = []
                 start_time = None
