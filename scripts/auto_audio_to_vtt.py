@@ -4,7 +4,7 @@
 1. audio_input/ に音声ファイル（mp3/mp4/m4a/mov/wav）を配置
 2. AUDIO_FILENAME を対象ファイル名に変更
 3. `pip install -r requirements.txt`（初回はモデル自動ダウンロード）
-4. `python scripts/auto_mp3_to_vtt_fast_whisper.py` を実行
+4. `python scripts/auto_audio_to_vtt.py` を実行
 5. vtt_output/ に .vtt ファイルが出力されます
 """
 

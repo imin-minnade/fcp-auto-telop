@@ -38,7 +38,7 @@ Final Cut Pro のタイムライン上で直接テキストクリップを分割
 fcp-auto-telop/
 ├── scripts/                    # 自動化スクリプト
 │   ├── auto_fcp_telop_split_paste.py
-│   ├── auto_mp3_to_vtt_fast_whisper.py
+│   ├── auto_audio_to_vtt.py
 │   ├── auto_aques_talk_player.py
 │   └── get_mouse_positions.py
 ├── csv_input/                  # シナリオ CSV を配置
@@ -54,7 +54,7 @@ fcp-auto-telop/
 | スクリプト | 機能 | 入力 | 出力 |
 |---|---|---|---|
 | `auto_fcp_telop_split_paste.py` | FCP 上でテキストクリップの分割とセリフの貼り付け | `txt_input/*.txt` | FCP タイムライン |
-| `auto_mp3_to_vtt_fast_whisper.py` | faster-whisper で音声ファイルを文字起こし | `audio_input/*` | `vtt_output/*.vtt` |
+| `auto_audio_to_vtt.py` | faster-whisper で音声ファイルを文字起こし | `audio_input/*` | `vtt_output/*.vtt` |
 | `auto_aques_talk_player.py` | AquesTalk Player への読み上げテキスト自動入力 | `csv_input/*.csv` | AquesTalk 音声 |
 | `get_mouse_positions.py` | クリックした画面座標を表示 | マウス操作 | 座標値の表示 |
 
@@ -116,7 +116,7 @@ python scripts/auto_fcp_telop_split_paste.py
 2. Whisper で文字起こし：
 
 ```bash
-python scripts/auto_mp3_to_vtt_fast_whisper.py
+python scripts/auto_audio_to_vtt.py
 ```
 
 3. `vtt_output/` に生成された VTT を確認・修正
