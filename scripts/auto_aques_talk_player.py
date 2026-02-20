@@ -22,13 +22,16 @@ import pyperclip
 CSV_FILE = "csv_input/sample.csv"
 
 # 読み上げ対象のキャラクター名
-TARGET_CHARACTER = "ナレーター"
+TARGET_CHARACTER = "魔理沙"
 
 # AquesTalk Player の入力欄座標（get_mouse_positions.py で取得）
-INPUT_X, INPUT_Y = -1891, 1167
+INPUT_X, INPUT_Y = 36, 97
 
 # 再生ボタンの座標
-BUTTON_X, BUTTON_Y = -1594, 1260
+BUTTON_X, BUTTON_Y = 349, 194
+
+# 開始前のカウントダウン（秒）
+SLEEP_COUNTDOWN = 5
 # ===================== 設定ここまで =====================
 
 # 読みの修正リスト（AquesTalk が正しく読めない単語を修正）
@@ -64,11 +67,14 @@ print(f"   CSV の列名: {df.columns.tolist()}")
 # 実行列を数値型に変換
 df["実行"] = pd.to_numeric(df["実行"], errors="coerce")
 
-print("⏱ 5秒後に開始します。AquesTalk Player をアクティブにしておいてください！")
-time.sleep(5)
+print(f"⏱ {SLEEP_COUNTDOWN}秒後に開始します。AquesTalk Player をアクティブにしておいてください！")
+time.sleep(SLEEP_COUNTDOWN)
+
+# OS によって修飾キーを切り替え（ループ外で1回だけ取得）
+modifier_key = "command" if platform.system() == "Darwin" else "ctrl"
 
 count = 0
-for i, row in df.iterrows():
+for _, row in df.iterrows():
     # 実行条件のチェック
     if pd.isna(row["実行"]) or row["実行"] != 1:
         continue
@@ -95,12 +101,8 @@ for i, row in df.iterrows():
     pyautogui.click(INPUT_X, INPUT_Y)
     time.sleep(0.5)
 
-    # クリップボードにコピーして貼り付け
+    # クリップボードにコピー
     pyperclip.copy(voice)
-    time.sleep(0.5)
-
-    # OS によって修飾キーを切り替え
-    modifier_key = "command" if platform.system() == "Darwin" else "ctrl"
 
     # テキスト全選択
     pyautogui.keyDown(modifier_key)

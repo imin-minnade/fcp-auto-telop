@@ -13,6 +13,7 @@ audio_input/*.mp4
 audio_input/*.m4a
 audio_input/*.mov
 audio_input/*.wav
+wav_output/*.wav
 
 # VTT 出力（個人データのため除外）
 vtt_output/*.vtt
