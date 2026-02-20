@@ -37,10 +37,10 @@ Final Cut Pro のタイムライン上で直接テキストクリップを分割
 ```
 fcp-auto-telop/
 ├── scripts/                    # 自動化スクリプト
-│   ├── auto_finalcutpro_text_clip_cut_and_paster.py
+│   ├── auto_fcp_telop_split_paste.py
 │   ├── auto_mp3_to_vtt_fast_whisper.py
 │   ├── auto_aques_talk_player.py
-│   └── calibrate_coordinates.py
+│   └── get_mouse_positions.py
 ├── csv_input/                  # シナリオ CSV を配置
 │   └── sample.csv
 ├── audio_input/                # 音声ファイルを配置（生声ルート）
@@ -53,10 +53,10 @@ fcp-auto-telop/
 
 | スクリプト | 機能 | 入力 | 出力 |
 |---|---|---|---|
-| `auto_finalcutpro_text_clip_cut_and_paster.py` | FCP 上でテキストクリップの分割とセリフの貼り付け | `csv_input/*.csv` | FCP タイムライン |
+| `auto_fcp_telop_split_paste.py` | FCP 上でテキストクリップの分割とセリフの貼り付け | `txt_input/*.txt` | FCP タイムライン |
 | `auto_mp3_to_vtt_fast_whisper.py` | faster-whisper で音声ファイルを文字起こし | `audio_input/*` | `vtt_output/*.vtt` |
 | `auto_aques_talk_player.py` | AquesTalk Player への読み上げテキスト自動入力 | `csv_input/*.csv` | AquesTalk 音声 |
-| `calibrate_coordinates.py` | お使いの環境に合わせた画面座標を取得 | マウス操作 | 座標値の表示 |
+| `get_mouse_positions.py` | クリックした画面座標を表示 | マウス操作 | 座標値の表示 |
 
 ---
 
@@ -94,7 +94,7 @@ pip install -r requirements.txt
 お使いの Mac の画面解像度に合わせて、FCP のテキスト入力欄の座標を取得します。
 
 ```bash
-python scripts/calibrate_coordinates.py
+python scripts/get_mouse_positions.py
 ```
 
 取得した座標を各スクリプトの `INPUT_X, INPUT_Y` に設定してください。
@@ -107,7 +107,7 @@ python scripts/calibrate_coordinates.py
 4. スクリプトを実行：
 
 ```bash
-python scripts/auto_finalcutpro_text_clip_cut_and_paster.py
+python scripts/auto_fcp_telop_split_paste.py
 ```
 
 ### 3B. 生声ルート

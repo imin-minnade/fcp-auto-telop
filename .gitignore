@@ -19,8 +19,23 @@ vtt_output/*.vtt
 
 # CSV データ（サンプル以外は除外）
 # csv_input/sample.csv は含める
-csv_input/*.csv
+csv_input/*.*
 !csv_input/sample.csv
+
+# TXT データ（サンプル以外は除外）
+# txt_input/sample.txt は含める
+txt_input/*.*
+!txt_input/sample.txt
+
+# VTT データ（サンプル以外は除外）
+# vtt_input/sample.vtt は含める
+vtt_input/*.*
+!vtt_input/sample.vtt
+
+# SRT データ（サンプル以外は除外）
+# srt_input/sample.srt は含める
+srt_input/*.*
+!srt_input/sample.srt
 
 # OS
 .DS_Store

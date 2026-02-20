@@ -6,7 +6,7 @@ CSV ファイルからセリフを読み込み、AquesTalk Player に
 使い方:
 1. csv_input/ にシナリオ CSV を配置（列: 実行, キャラクター, セリフ）
 2. CSV_FILE, TARGET_CHARACTER を変更
-3. INPUT_X, INPUT_Y, BUTTON_X, BUTTON_Y を calibrate_coordinates.py で取得した値に変更
+3. INPUT_X, INPUT_Y, BUTTON_X, BUTTON_Y を get_mouse_positions.py で取得した値に変更
 4. AquesTalk Player を開いた状態で実行
 """
 
@@ -24,7 +24,7 @@ CSV_FILE = "csv_input/sample.csv"
 # 読み上げ対象のキャラクター名
 TARGET_CHARACTER = "ナレーター"
 
-# AquesTalk Player の入力欄座標（calibrate_coordinates.py で取得）
+# AquesTalk Player の入力欄座標（get_mouse_positions.py で取得）
 INPUT_X, INPUT_Y = -1891, 1167
 
 # 再生ボタンの座標

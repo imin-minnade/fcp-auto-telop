@@ -1,0 +1,12 @@
+# FCP Auto Telop - 依存パッケージ
+
+# GUI 自動化
+pyautogui>=0.9.54
+pyperclip>=1.8.2
+pynput>=1.7.0
+
+# データ処理
+pandas>=2.0.0
+
+# 音声文字起こし（生声ルートで使用）
+faster-whisper>=1.0.0
