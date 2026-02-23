@@ -25,7 +25,7 @@ import pyperclip
 TXT_FILE = "txt_input/sample.txt"
 
 # テキスト入力欄の座標（get_mouse_positions.py で取得）
-INPUT_X, INPUT_Y = 3490, 200
+INPUT_X, INPUT_Y = 955, 204
 
 # キー操作間のウェイト（秒）
 SLEEP_SHORT = 0.5
@@ -155,6 +155,12 @@ def main():
             # 2回目以降は Tab で移動
             pyautogui.press("tab")
             time.sleep(SLEEP_SHORT)
+
+        # 全選択（Command + A）
+        pyautogui.keyDown("command")
+        pyautogui.press("a")
+        pyautogui.keyUp("command")
+        time.sleep(SLEEP_SHORT)
 
         # 貼り付け（Command + V）
         pyautogui.keyDown("command")

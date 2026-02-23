@@ -25,10 +25,10 @@ CSV_FILE = "csv_input/sample.csv"
 TARGET_CHARACTER = "魔理沙"
 
 # AquesTalk Player の入力欄座標（get_mouse_positions.py で取得）
-INPUT_X, INPUT_Y = 36, 97
+INPUT_X, INPUT_Y = 33, 91
 
 # 再生ボタンの座標
-BUTTON_X, BUTTON_Y = 349, 194
+BUTTON_X, BUTTON_Y = 337, 195
 
 # 開始前のカウントダウン（秒）
 SLEEP_COUNTDOWN = 5
