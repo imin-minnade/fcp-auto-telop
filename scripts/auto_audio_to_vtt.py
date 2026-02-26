@@ -23,7 +23,7 @@ AUDIO_DIR = Path("audio_input")
 VTT_DIR = Path("vtt_output")
 
 # 対象ファイル名（拡張子なしの場合は自動探索）
-AUDIO_FILENAME = "音声.mp3"
+AUDIO_FILENAME = "sample2.m4a"
 
 # 探索対象の拡張子（優先順）
 ALLOWED_EXTS = [".mp3", ".mp4", ".m4a", ".mov", ".wav"]

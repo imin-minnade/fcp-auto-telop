@@ -8,10 +8,10 @@ import pyperclip
 # ====== 環境依存パラメータ（あなたの環境に合わせて調整） ======
 
 # VTT ファイル（vtt_input/ ディレクトリに配置）
-VTT_FILE = "vtt_input/音声.vtt"
+VTT_FILE = "vtt_input/sample.vtt"
 
 # テキストインスペクタのテキスト入力フィールドの位置（画面座標）
-INPUT_X, INPUT_Y = 3457, 190
+INPUT_X, INPUT_Y = 955, 204
 
 # タイムラインのフレームレート
 FPS = 25  # プロジェクトに合わせて変更
@@ -225,7 +225,9 @@ def focus_text_field_first_time():
 def paste_text(text: str):
     """テキストフィールドに text をペースト（Cmd+V）"""
     pyperclip.copy(text)
-    pyautogui.hotkey("command", "v")
+    pyautogui.keyDown("command")
+    pyautogui.press("v")
+    pyautogui.keyUp("command")
     time.sleep(SLEEP_SHORT)
     print("command+v")
     print("text", text)
